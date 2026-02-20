@@ -1,0 +1,34 @@
+{
+  "name": "lacleoomnia-auto",
+  "version": "1.0.0",
+  "description": "Production-grade Shopify to Snov.io automation server",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate:dev": "prisma migrate dev"
+  },
+  "keywords": [
+    "shopify",
+    "snov.io",
+    "automation",
+    "webhooks"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.8.0",
+    "axios": "^1.6.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "prisma": "^5.8.0"
+  }
+}
