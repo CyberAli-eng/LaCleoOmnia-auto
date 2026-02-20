@@ -9,9 +9,11 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node src/server.js",
+    "test": "node test-suite.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
-    "prisma:migrate:dev": "prisma migrate dev"
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
   },
   "keywords": [
     "shopify",
