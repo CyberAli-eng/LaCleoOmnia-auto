@@ -7,30 +7,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum CheckoutStatus {
+  pending
+  converted
+  abandoned
+}
+
 model Checkout {
-  id          Int      @id @default(autoincrement())
-  checkoutId  String   @unique
-  email       String
+  id          Int            @id @default(autoincrement())
+  checkoutId  String         @unique
+  email       String?
   firstName   String?
   lastName    String?
   recoveryUrl String?
-  cartValue   Float
-  currency    String
-  status      String   @default("pending")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  cartValue   Float?
+  currency    String?
+  status      CheckoutStatus @default(pending)
+  orderId     String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   @@index([email])
   @@index([status, createdAt])
 }
 
 model Order {
-  id        Int      @id @default(autoincrement())
-  orderId   String   @unique
-  email     String
-  totalPrice Float
-  currency  String
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  orderId    String   @unique
+  email      String?
+  totalPrice Float?
+  currency   String?
+  createdAt  DateTime @default(now())
 
   @@index([email])
 }
@@ -38,7 +45,7 @@ model Order {
 model Customer {
   id                 Int      @id @default(autoincrement())
   shopifyCustomerId  String   @unique
-  email              String   @unique
+  email              String?
   firstName          String?
   lastName           String?
   createdAt          DateTime @default(now())

@@ -51,17 +51,22 @@ class CheckoutService {
     }
   }
 
-  async markAsConverted(email) {
+  async markAsConverted(email, orderId = null) {
     try {
+      const data = { status: 'converted' };
+      if (orderId) {
+        data.orderId = orderId;
+      }
+
       const result = await prisma.checkout.updateMany({
         where: {
           email,
           status: 'pending'
         },
-        data: { status: 'converted' }
+        data
       });
 
-      logger.info(`Checkouts marked as converted for ${email}: ${result.count} records`);
+      logger.info(`Checkouts marked as converted for ${email}: ${result.count} records (Order: ${orderId})`);
       return result;
     } catch (error) {
       logger.error('Failed to mark checkout as converted:', error);

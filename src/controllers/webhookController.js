@@ -8,7 +8,7 @@ class WebhookController {
   async handleCheckout(req, res) {
     try {
       const webhook = req.body;
-      
+
       logger.info('Checkout webhook received:', {
         id: webhook.id,
         email: webhook.email
@@ -27,7 +27,7 @@ class WebhookController {
       await checkoutService.upsertCheckout(checkoutData);
 
       logger.info(`Checkout stored successfully: ${checkoutData.checkoutId}`);
-      
+
       return res.status(200).json({ success: true });
     } catch (error) {
       logger.error('Checkout webhook error:', error);
@@ -38,7 +38,7 @@ class WebhookController {
   async handleOrder(req, res) {
     try {
       const webhook = req.body;
-      
+
       logger.info('Order webhook received:', {
         id: webhook.id,
         email: webhook.email
@@ -53,7 +53,7 @@ class WebhookController {
 
       await orderService.createOrder(orderData);
 
-      await checkoutService.markAsConverted(orderData.email);
+      await checkoutService.markAsConverted(orderData.email, orderData.orderId);
 
       logger.info('Triggering upsell campaign');
       try {
@@ -63,7 +63,7 @@ class WebhookController {
       }
 
       logger.info(`Order processed successfully: ${orderData.orderId}`);
-      
+
       return res.status(200).json({ success: true });
     } catch (error) {
       logger.error('Order webhook error:', error);
@@ -74,7 +74,7 @@ class WebhookController {
   async handleCustomer(req, res) {
     try {
       const webhook = req.body;
-      
+
       logger.info('Customer webhook received:', {
         id: webhook.id,
         email: webhook.email
@@ -97,7 +97,7 @@ class WebhookController {
       }
 
       logger.info(`Customer processed successfully: ${customerData.shopifyCustomerId}`);
-      
+
       return res.status(200).json({ success: true });
     } catch (error) {
       logger.error('Customer webhook error:', error);

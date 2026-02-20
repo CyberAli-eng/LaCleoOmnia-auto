@@ -6,14 +6,21 @@ const testRoutes = require('./routes/test');
 
 const app = express();
 
+// Middleware to capture raw body for HMAC verification
+app.use('/webhook', express.raw({ type: 'application/json' }));
+
+// Regular JSON parsing for other routes
 app.use((req, res, next) => {
-  if (req.path.startsWith('/webhook/')) {
-    express.raw({ type: 'application/json' })(req, res, (err) => {
-      if (err) return next(err);
+  if (req.path.startsWith('/webhook')) {
+    if (req.body instanceof Buffer) {
       req.rawBody = req.body;
-      req.body = JSON.parse(req.body.toString('utf8'));
-      next();
-    });
+      try {
+        req.body = JSON.parse(req.body.toString('utf8'));
+      } catch (err) {
+        return res.status(400).json({ error: 'Invalid JSON' });
+      }
+    }
+    next();
   } else {
     express.json()(req, res, next);
   }
