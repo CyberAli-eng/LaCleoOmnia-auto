@@ -39,13 +39,13 @@ class SnovService {
     }
   }
 
-  async addProspectToCampaign(email, firstName, lastName, campaignId, customFields = {}) {
+  async addProspectToList(email, firstName, lastName, listId, customFields = {}) {
     if (config.snov.mock) {
-      logger.info(`[MOCK] Adding prospect to campaign: ${email} -> Campaign ${campaignId}`);
+      logger.info(`[MOCK] Adding prospect to list: ${email} -> List ${listId}`);
       return {
         success: true,
         mock: true,
-        data: { email, campaignId, firstName, lastName, customFields }
+        data: { email, listId, firstName, lastName, customFields }
       };
     }
 
@@ -53,17 +53,18 @@ class SnovService {
       const token = await this.getAccessToken();
 
       const payload = {
+        listId: parseInt(listId),
         email,
         firstName: firstName || '',
         lastName: lastName || '',
-        campaignId: campaignId,
-        ...customFields
+        fullName: `${firstName || ''} ${lastName || ''}`.trim(),
+        customFields: customFields
       };
 
-      logger.info(`Adding prospect to Snov.io campaign: ${email} -> ${campaignId}`);
+      logger.info(`Adding prospect to Snov.io list: ${email} -> ${listId}`);
 
       const response = await axios.post(
-        `${this.baseUrl}/add-prospect`,
+        `${this.baseUrl}/add-names-to-list`,
         payload,
         {
           headers: {
@@ -73,72 +74,72 @@ class SnovService {
         }
       );
 
-      logger.info(`Prospect added successfully: ${email}`);
+      logger.info(`Prospect added to list successfully: ${email}`);
       return response.data;
     } catch (error) {
-      logger.error('Failed to add prospect to Snov.io:', error.response?.data || error.message);
+      logger.error('Failed to add prospect to Snov.io list:', error.response?.data || error.message);
       throw error;
     }
   }
 
   async sendAbandonedCartCampaign(checkout) {
-    const campaignId = config.snov.campaigns.abandoned;
+    const listId = config.snov.campaigns.abandoned;
 
-    if (!campaignId) {
-      logger.warn('SNOV_CAMPAIGN_ABANDONED not configured, skipping');
-      return { skipped: true, reason: 'Campaign ID not configured' };
+    if (!listId) {
+      logger.warn('SNOV_CAMPAIGN_ABANDONED (List ID) not configured, skipping');
+      return { skipped: true, reason: 'List ID not configured' };
     }
 
-    return await this.addProspectToCampaign(
+    return await this.addProspectToList(
       checkout.email,
       checkout.firstName,
       checkout.lastName,
-      campaignId,
+      listId,
       {
         recovery_url: checkout.recoveryUrl,
-        cart_value: checkout.cartValue,
+        cart_value: String(checkout.cartValue),
         currency: checkout.currency
       }
     );
   }
 
   async sendUpsellCampaign(order) {
-    const campaignId = config.snov.campaigns.upsell;
+    const listId = config.snov.campaigns.upsell;
 
-    if (!campaignId) {
-      logger.warn('SNOV_CAMPAIGN_UPSELL not configured, skipping');
-      return { skipped: true, reason: 'Campaign ID not configured' };
+    if (!listId) {
+      logger.warn('SNOV_CAMPAIGN_UPSELL (List ID) not configured, skipping');
+      return { skipped: true, reason: 'List ID not configured' };
     }
 
     const checkout = await prisma.checkout.findFirst({
       where: { email: order.email }
     });
 
-    return await this.addProspectToCampaign(
+    return await this.addProspectToList(
       order.email,
       checkout?.firstName || '',
       checkout?.lastName || '',
-      campaignId,
+      listId,
       {
-        order_value: order.totalPrice,
+        order_value: String(order.totalPrice),
         currency: order.currency
       }
     );
   }
 
   async sendWelcomeCampaign(customer) {
-    const campaignId = config.snov.campaigns.welcome;
+    const listId = config.snov.campaigns.welcome;
 
-    if (!campaignId) {
-      logger.warn('SNOV_CAMPAIGN_WELCOME not configured, skipping');
-      return { skipped: true, reason: 'Campaign ID not configured' };
+    if (!listId) {
+      logger.warn('SNOV_CAMPAIGN_WELCOME (List ID) not configured, skipping');
+      return { skipped: true, reason: 'List ID not configured' };
     }
 
-    return await this.addProspectToCampaign(
+    return await this.addProspectToList(
       customer.email,
       customer.firstName,
       customer.lastName,
-      campaignId
+      listId
     );
   }
 }
