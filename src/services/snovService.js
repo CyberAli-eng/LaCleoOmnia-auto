@@ -21,7 +21,7 @@ class SnovService {
 
     try {
       logger.info('Fetching new Snov.io access token');
-      
+
       const response = await axios.post(`${this.baseUrl}/oauth/access_token`, {
         grant_type: 'client_credentials',
         client_id: config.snov.clientId,
@@ -30,7 +30,7 @@ class SnovService {
 
       this.accessToken = response.data.access_token;
       this.tokenExpiry = Date.now() + (response.data.expires_in * 1000) - 60000;
-      
+
       logger.info('Snov.io access token obtained successfully');
       return this.accessToken;
     } catch (error) {
@@ -53,17 +53,17 @@ class SnovService {
       const token = await this.getAccessToken();
 
       const payload = {
-        email,
-        first_name: firstName,
-        last_name: lastName,
         campaign_id: campaignId,
+        email,
+        first_name: firstName || '',
+        last_name: lastName || '',
         ...customFields
       };
 
       logger.info(`Adding prospect to Snov.io campaign: ${email} -> ${campaignId}`);
 
       const response = await axios.post(
-        `${this.baseUrl}/add-prospect`,
+        `${this.baseUrl}/add-prospect-to-campaign`,
         payload,
         {
           headers: {
@@ -83,7 +83,7 @@ class SnovService {
 
   async sendAbandonedCartCampaign(checkout) {
     const campaignId = config.snov.campaigns.abandoned;
-    
+
     if (!campaignId) {
       logger.warn('SNOV_CAMPAIGN_ABANDONED not configured, skipping');
       return { skipped: true, reason: 'Campaign ID not configured' };
@@ -104,7 +104,7 @@ class SnovService {
 
   async sendUpsellCampaign(order) {
     const campaignId = config.snov.campaigns.upsell;
-    
+
     if (!campaignId) {
       logger.warn('SNOV_CAMPAIGN_UPSELL not configured, skipping');
       return { skipped: true, reason: 'Campaign ID not configured' };
@@ -128,7 +128,7 @@ class SnovService {
 
   async sendWelcomeCampaign(customer) {
     const campaignId = config.snov.campaigns.welcome;
-    
+
     if (!campaignId) {
       logger.warn('SNOV_CAMPAIGN_WELCOME not configured, skipping');
       return { skipped: true, reason: 'Campaign ID not configured' };
