@@ -53,17 +53,17 @@ class SnovService {
       const token = await this.getAccessToken();
 
       const payload = {
-        campaign_id: campaignId,
         email,
-        first_name: firstName || '',
-        last_name: lastName || '',
+        firstName: firstName || '',
+        lastName: lastName || '',
+        campaignId: campaignId,
         ...customFields
       };
 
       logger.info(`Adding prospect to Snov.io campaign: ${email} -> ${campaignId}`);
 
       const response = await axios.post(
-        `${this.baseUrl}/add-prospect-to-campaign`,
+        `${this.baseUrl}/add-prospect`,
         payload,
         {
           headers: {
