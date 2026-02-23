@@ -70,7 +70,7 @@ class SnovService {
       logger.info(`Adding prospect to Snov list ${listId} for ${email}`);
 
       const response = await axios.post(
-        'https://api.snov.io/v1/add-names-to-list',
+        'https://api.snov.io/v1/add-prospect-to-list',
         payload,
         {
           headers: {
