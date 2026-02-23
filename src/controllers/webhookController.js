@@ -68,7 +68,7 @@ class WebhookController {
           });
 
           logger.info(`Processing order ${orderData.orderId}`);
-          await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '');
+          await snovService.triggerWelcome(orderData.email, checkout?.firstName || '', checkout?.lastName || '');
           await orderService.updateSnovSentAt(orderData.orderId);
           logger.info(`Checkout synced to Snov`);
         } else {
@@ -113,7 +113,7 @@ class WebhookController {
 
         if (customer && !customer.snovSentAt) {
           logger.info(`Processing customer ${customerData.shopifyCustomerId}`);
-          await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName);
+          await snovService.triggerUpsell(customerData.email, customerData.firstName, customerData.lastName);
           await customerService.updateSnovSentAt(customerData.shopifyCustomerId);
           logger.info(`Checkout synced to Snov`);
         } else {
