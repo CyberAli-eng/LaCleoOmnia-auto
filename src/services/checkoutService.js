@@ -80,10 +80,16 @@ class CheckoutService {
 
       const checkouts = await prisma.checkout.findMany({
         where: {
-          status: 'pending',
-          createdAt: {
-            lt: thresholdDate
-          }
+          OR: [
+            {
+              status: 'pending',
+              createdAt: { lt: thresholdDate }
+            },
+            {
+              status: 'abandoned',
+              snovSentAt: null
+            }
+          ]
         }
       });
 

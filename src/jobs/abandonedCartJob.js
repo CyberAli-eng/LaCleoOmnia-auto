@@ -29,7 +29,7 @@ function startAbandonedCartJob() {
             where: { checkoutId: checkout.checkoutId }
           });
 
-          if (currentCheckout && currentCheckout.status === 'pending' && !currentCheckout.snovSentAt) {
+          if (currentCheckout && (currentCheckout.status === 'pending' || currentCheckout.status === 'abandoned') && !currentCheckout.snovSentAt) {
             await checkoutService.markAsAbandoned(checkout.checkoutId);
 
             logger.info(`Processing checkout ${checkout.checkoutId}`);
