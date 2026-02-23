@@ -26,6 +26,18 @@ class OrderService {
       throw error;
     }
   }
+
+  async updateSnovSentAt(orderId) {
+    try {
+      return await prisma.order.update({
+        where: { orderId },
+        data: { snovSentAt: new Date() }
+      });
+    } catch (error) {
+      logger.error(`Failed to update snovSentAt for order ${orderId}:`, error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new OrderService();

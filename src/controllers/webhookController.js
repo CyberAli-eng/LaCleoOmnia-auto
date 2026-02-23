@@ -58,10 +58,25 @@ class WebhookController {
 
       logger.info('Triggering upsell campaign');
       try {
-        const checkout = await prisma.checkout.findFirst({
-          where: { email: orderData.email }
+        const order = await prisma.order.findUnique({
+          where: { orderId: orderData.orderId }
         });
-        await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '', orderData);
+
+        if (order && !order.snovSentAt) {
+          const checkout = await prisma.checkout.findFirst({
+            where: { email: orderData.email }
+          });
+
+          logger.info(`Adding prospect to Snov upsell list for ${orderData.email}`);
+          const result = await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '', orderData);
+
+          if (result && (result.success !== false)) {
+            await orderService.updateSnovSentAt(orderData.orderId);
+            logger.info('Upsell campaign triggered and snovSentAt updated');
+          }
+        } else {
+          logger.info(`Upsell campaign already sent for order ${orderData.orderId}, skipping`);
+        }
       } catch (snovError) {
         logger.error('Snov upsell campaign failed (non-blocking):', snovError.message);
       }
@@ -95,7 +110,21 @@ class WebhookController {
 
       logger.info('Triggering welcome campaign');
       try {
-        await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName);
+        const customer = await prisma.customer.findUnique({
+          where: { shopifyCustomerId: customerData.shopifyCustomerId }
+        });
+
+        if (customer && !customer.snovSentAt) {
+          logger.info(`Adding prospect to Snov welcome list for ${customerData.email}`);
+          const result = await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName);
+
+          if (result && (result.success !== false)) {
+            await customerService.updateSnovSentAt(customerData.shopifyCustomerId);
+            logger.info('Welcome campaign triggered and snovSentAt updated');
+          }
+        } else {
+          logger.info(`Welcome campaign already sent for customer ${customerData.shopifyCustomerId}, skipping`);
+        }
       } catch (snovError) {
         logger.error('Snov welcome campaign failed (non-blocking):', snovError.message);
       }

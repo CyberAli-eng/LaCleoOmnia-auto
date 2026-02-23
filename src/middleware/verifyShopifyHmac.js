@@ -5,7 +5,7 @@ const { logger } = require('../utils/logger');
 function verifyShopifyHmac(req, res, next) {
   try {
     const hmacHeader = req.get('x-shopify-hmac-sha256');
-    
+
     if (!hmacHeader) {
       logger.warn('Missing HMAC header');
       return res.status(401).json({ error: 'Missing HMAC signature' });
@@ -17,24 +17,24 @@ function verifyShopifyHmac(req, res, next) {
     }
 
     const body = req.rawBody;
-    
-    const hash = crypto
+
+    const expectedHmac = crypto
       .createHmac('sha256', config.shopify.webhookSecret)
       .update(body, 'utf8')
       .digest('base64');
 
-    const hmacBuffer = Buffer.from(hmacHeader);
-    const hashBuffer = Buffer.from(hash);
+    const hmacBuffer = Buffer.from(hmacHeader, 'utf8');
+    const expectedBuffer = Buffer.from(expectedHmac, 'utf8');
 
-    if (hmacBuffer.length !== hashBuffer.length) {
-      logger.warn('HMAC verification failed: length mismatch');
+    if (hmacBuffer.length !== expectedBuffer.length) {
+      logger.warn(`HMAC verification failed: length mismatch (${hmacBuffer.length} vs ${expectedBuffer.length})`);
       return res.status(401).json({ error: 'Invalid HMAC signature' });
     }
 
-    const isValid = crypto.timingSafeEqual(hmacBuffer, hashBuffer);
+    const isValid = crypto.timingSafeEqual(hmacBuffer, expectedBuffer);
 
     if (!isValid) {
-      logger.warn('HMAC verification failed');
+      logger.warn('HMAC verification failed: signature mismatch');
       return res.status(401).json({ error: 'Invalid HMAC signature' });
     }
 

@@ -94,6 +94,18 @@ class CheckoutService {
       throw error;
     }
   }
+
+  async updateSnovSentAt(checkoutId) {
+    try {
+      return await prisma.checkout.update({
+        where: { checkoutId },
+        data: { snovSentAt: new Date() }
+      });
+    } catch (error) {
+      logger.error(`Failed to update snovSentAt for checkout ${checkoutId}:`, error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new CheckoutService();

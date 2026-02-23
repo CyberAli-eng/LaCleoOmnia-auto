@@ -2,6 +2,7 @@ const cron = require('node-cron');
 const checkoutService = require('../services/checkoutService');
 const snovService = require('../services/snovService');
 const { config } = require('../config/env');
+const prisma = require('../config/prisma');
 const { logger } = require('../utils/logger');
 
 function startAbandonedCartJob() {
@@ -23,12 +24,24 @@ function startAbandonedCartJob() {
 
       for (const checkout of abandonedCheckouts) {
         try {
-          await checkoutService.markAsAbandoned(checkout.checkoutId);
+          // Fetch latest state to avoid race condition with order webhooks
+          const currentCheckout = await prisma.checkout.findUnique({
+            where: { checkoutId: checkout.checkoutId }
+          });
 
-          logger.info(`Triggering abandoned cart campaign for: ${checkout.email}`);
-          await snovService.triggerAbandoned(checkout.email, checkout.firstName, checkout.lastName, checkout);
+          if (currentCheckout && currentCheckout.status === 'pending' && !currentCheckout.snovSentAt) {
+            await checkoutService.markAsAbandoned(checkout.checkoutId);
 
-          logger.info(`Abandoned cart processed: ${checkout.checkoutId}`);
+            logger.info(`Triggering abandoned cart campaign for: ${checkout.email}`);
+            const result = await snovService.triggerAbandoned(checkout.email, checkout.firstName, checkout.lastName, checkout);
+
+            if (result && (result.success !== false)) {
+              await checkoutService.updateSnovSentAt(checkout.checkoutId);
+              logger.info(`Abandoned cart processed and snovSentAt updated: ${checkout.checkoutId}`);
+            }
+          } else {
+            logger.info(`Checkout ${checkout.checkoutId} already processed, converted, or sent to Snov, skipping`);
+          }
         } catch (error) {
           logger.error(`Failed to process abandoned checkout ${checkout.checkoutId}:`, error.message);
         }

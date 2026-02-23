@@ -1,0 +1,1495 @@
+
+🚀 Starting lacleoOmnia-auto Tests
+
+Base URL: http://localhost:3000
+
+
+=== Test 1: Health Check ===
+✅ GET /: {
+  service: 'lacleoOmnia-auto',
+  status: 'running',
+  version: '1.0.0',
+  endpoints: {
+    webhooks: [
+      'POST /webhook/checkout',
+      'POST /webhook/order',
+      'POST /webhook/customer'
+    ],
+    test: [
+      'POST /test/checkout',
+      'POST /test/order',
+      'POST /test/customer',
+      'GET /test/checkouts',
+      'GET /test/orders',
+      'GET /test/customers',
+      'POST /test/snov',
+      'DELETE /test/reset'
+    ]
+  }
+}
+
+=== Test 2: Create Test Checkouts ===
+✅ POST /test/checkout: {
+  success: true,
+  checkout: {
+    id: 56,
+    checkoutId: 'test-checkout-001',
+    email: 'test1@example.com',
+    firstName: 'Alice',
+    lastName: 'Johnson',
+    recoveryUrl: 'https://test-recovery.com/checkout/test-checkout-001',
+    cartValue: 150,
+    currency: 'USD',
+    status: 'pending',
+    orderId: null,
+    snovSentAt: null,
+    createdAt: '2026-02-23T07:09:05.753Z',
+    updatedAt: '2026-02-23T07:10:07.170Z'
+  }
+}
+✅ POST /test/checkout: {
+  success: true,
+  checkout: {
+    id: 57,
+    checkoutId: 'test-checkout-002',
+    email: 'test2@example.com',
+    firstName: 'Bob',
+    lastName: 'Smith',
+    recoveryUrl: 'https://test-recovery.com/checkout/test-checkout-002',
+    cartValue: 200,
+    currency: 'USD',
+    status: 'pending',
+    orderId: null,
+    snovSentAt: null,
+    createdAt: '2026-02-23T07:09:06.273Z',
+    updatedAt: '2026-02-23T07:10:07.507Z'
+  }
+}
+
+=== Test 3: List Checkouts ===
+✅ GET /test/checkouts: {
+  success: true,
+  count: 35,
+  checkouts: [
+    {
+      id: 66,
+      checkoutId: 'shopify-checkout-999',
+      email: 'hmac-test@example.com',
+      firstName: 'HMAC',
+      lastName: 'Test',
+      recoveryUrl: 'https://example.com/recover',
+      cartValue: 99.99,
+      currency: 'USD',
+      status: 'pending',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-23T07:09:55.746Z',
+      updatedAt: '2026-02-23T07:09:55.746Z'
+    },
+    {
+      id: 58,
+      checkoutId: 'idempotent-001',
+      email: 'same@example.com',
+      firstName: 'Same',
+      lastName: 'User',
+      recoveryUrl: 'https://test-recovery.com/checkout/idempotent-001',
+      cartValue: 100,
+      currency: 'USD',
+      status: 'pending',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-23T07:09:10.218Z',
+      updatedAt: '2026-02-23T07:09:56.271Z'
+    },
+    {
+      id: 57,
+      checkoutId: 'test-checkout-002',
+      email: 'test2@example.com',
+      firstName: 'Bob',
+      lastName: 'Smith',
+      recoveryUrl: 'https://test-recovery.com/checkout/test-checkout-002',
+      cartValue: 200,
+      currency: 'USD',
+      status: 'pending',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-23T07:09:06.273Z',
+      updatedAt: '2026-02-23T07:10:07.507Z'
+    },
+    {
+      id: 56,
+      checkoutId: 'test-checkout-001',
+      email: 'test1@example.com',
+      firstName: 'Alice',
+      lastName: 'Johnson',
+      recoveryUrl: 'https://test-recovery.com/checkout/test-checkout-001',
+      cartValue: 150,
+      currency: 'USD',
+      status: 'pending',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-23T07:09:05.753Z',
+      updatedAt: '2026-02-23T07:10:07.170Z'
+    },
+    {
+      id: 55,
+      checkoutId: '64844131598704',
+      email: 'phutelaravina@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN96OlgW7JS0sZKTMzTjEGa/recover?key=9a25c8e097574e8b188710924daedc45&locale=en-IN',
+      cartValue: 499,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-23T04:55:18.544Z',
+      updatedAt: '2026-02-23T05:00:00.229Z'
+    },
+    {
+      id: 52,
+      checkoutId: '64842705961328',
+      email: 'jainmegha499@gmail.com',
+      firstName: 'Meghana',
+      lastName: 'Jain',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN95kJg6aPzxZoHcgIx16fM/recover?key=0626f37cb44daa1ebd6eeb082c1e8c5c&locale=en-IN',
+      cartValue: 620,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T22:15:22.826Z',
+      updatedAt: '2026-02-22T22:20:00.660Z'
+    },
+    {
+      id: 49,
+      checkoutId: '64842545332592',
+      email: 'khandekartanvi13@gmail.com',
+      firstName: 'Tanvi',
+      lastName: 'Khandekar',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN95Or6C0B6tEOvSJIcB9xE/recover?key=cd332c70527077f7d539d1a708ed1920&locale=en-IN',
+      cartValue: 540,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T21:27:54.433Z',
+      updatedAt: '2026-02-22T21:30:00.767Z'
+    },
+    {
+      id: 46,
+      checkoutId: '64841637790064',
+      email: 'addlasoniya69@gmail.com',
+      firstName: 'Soniya',
+      lastName: '.',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN95F0PVajaRqJEJPLMbm7w/recover?key=103c0acca87e8e1073e68d9fe9dc73ff&locale=en-IN',
+      cartValue: 540,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T17:07:20.911Z',
+      updatedAt: '2026-02-22T17:10:00.554Z'
+    },
+    {
+      id: 45,
+      checkoutId: '64840853389680',
+      email: 'Ashvinimore987@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN94qGWbO8FBhx4LjCBywKq/recover?key=200062504662cbf05fb2b296efff4593&locale=en-IN',
+      cartValue: 449.1,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T13:01:45.683Z',
+      updatedAt: '2026-02-22T13:05:00.700Z'
+    },
+    {
+      id: 44,
+      checkoutId: '64840815706480',
+      email: 'kapkriti60@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN94okM1WHSvOKVOv87LcYe/recover?key=ddf2160693cf9ef492758a302daeb51f&locale=en-IN',
+      cartValue: 486,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T12:46:55.504Z',
+      updatedAt: '2026-02-22T12:50:01.382Z'
+    },
+    {
+      id: 41,
+      checkoutId: '64840805482864',
+      email: 'pooja24081985@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN94oNe3F79Hf4sKnBkMZtM/recover?key=4bc7f4d98db91b7e6b49ad7a76decdec&locale=en-IN',
+      cartValue: 540,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T12:43:51.608Z',
+      updatedAt: '2026-02-22T12:50:00.905Z'
+    },
+    {
+      id: 37,
+      checkoutId: '64840681488752',
+      email: 'jainmegha499@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN94ic2QZOFJ2Z1XoDUrNP2/recover?key=b95e75d9bd9e4490975c5243be59c253&locale=en-IN',
+      cartValue: 620,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T11:47:29.997Z',
+      updatedAt: '2026-02-22T11:50:00.528Z'
+    },
+    {
+      id: 36,
+      checkoutId: '64840189804912',
+      email: 'arzoochaudhary89@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN94PNtCLMCAvdy5CiTtCJY/recover?key=0d196b90dee034112ca4ee06b44414e6&locale=en-IN',
+      cartValue: 540,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:35:56.464Z',
+      updatedAt: '2026-02-22T08:40:01.000Z'
+    },
+    {
+      id: 35,
+      checkoutId: '64840154513776',
+      email: 'arzoochaudhary89@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN94OEwy1RYWjLNhfHhFCSq/recover?key=de482ffe98351c0be78c259d80478371&locale=en-IN',
+      cartValue: 540,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:25:21.956Z',
+      updatedAt: '2026-02-22T08:30:00.511Z'
+    },
+    {
+      id: 34,
+      checkoutId: '64840034189680',
+      email: 'pranjalithakare09@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN94JzPwV3p8wFXyAgtSxU4/recover?key=182324cecb4e0e07a90bf1431edde3d1&locale=en-IN',
+      cartValue: 620,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T07:43:16.577Z',
+      updatedAt: '2026-02-22T07:50:00.080Z'
+    },
+    {
+      id: 31,
+      checkoutId: '64839899906416',
+      email: 'sanketa.catapult@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN94FGk7Dhm5NBCfAPVeCkW/recover?key=92404d080aaf698807d2f93d395813d3&locale=en-IN',
+      cartValue: 1044,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T06:57:49.466Z',
+      updatedAt: '2026-02-22T07:00:00.577Z'
+    },
+    {
+      id: 30,
+      checkoutId: '64839613415792',
+      email: 'Kukupatel55469@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN945bk6UwDNmJKrKWQqNk4/recover?key=adabcde58b43df2b92dfb62d72d979af&locale=en-IN',
+      cartValue: 1789,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T05:21:25.126Z',
+      updatedAt: '2026-02-22T05:25:00.291Z'
+    },
+    {
+      id: 29,
+      checkoutId: '64839385907568',
+      email: 'shwetakhare67@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN93xvwJ3HwgvA39ltGNtxs/recover?key=9f857a8403da7023910109e89b41ed29&locale=en-IN',
+      cartValue: 540,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T04:05:33.097Z',
+      updatedAt: '2026-02-22T04:10:00.518Z'
+    },
+    {
+      id: 28,
+      checkoutId: '64839320699248',
+      email: 'addlasoniya69@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN93vZCtNTEk4YlNNvH4RhU/recover?key=1c1700c713760a8fd904b26b0dd1b9c3&locale=en-IN',
+      cartValue: 918,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T03:46:15.590Z',
+      updatedAt: '2026-02-22T03:50:00.498Z'
+    },
+    {
+      id: 25,
+      checkoutId: '64839302742384',
+      email: 'addlasoniya69@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN93vLQvW9b3LRGXal3uYxY/recover?key=0531ca8c87cac3eb4ca6590a895043a4&locale=en-IN',
+      cartValue: 918,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T03:41:51.740Z',
+      updatedAt: '2026-02-22T03:45:00.606Z'
+    },
+    {
+      id: 23,
+      checkoutId: '64839306248560',
+      email: 'addlasoniya69@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN93vXHumpkMrs6Cz5yuTf2/recover?key=455ce82038e6d316a1d7d4b052669f47&locale=en-IN',
+      cartValue: 918,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-22T03:41:51.605Z',
+      updatedAt: '2026-02-22T03:45:00.195Z'
+    },
+    {
+      id: 22,
+      checkoutId: '64838466732400',
+      email: 'Shaizqurashi12345@gmail.com',
+      firstName: 'Ali',
+      lastName: '.',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92PGuXeZSbgino8thvAJw/recover?key=0823f4c6f7114ed3e843ede37a2bee49&locale=en-IN',
+      cartValue: 890,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T23:46:06.511Z',
+      updatedAt: '2026-02-21T23:50:00.708Z'
+    },
+    {
+      id: 21,
+      checkoutId: '64837763105136',
+      email: null,
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN93LGklUwSP3H8Be2lPQ96/recover?key=b5cee1c9851e2afa717fc87f1cd7d5a9&locale=en-IN',
+      cartValue: 540,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T20:30:34.380Z',
+      updatedAt: '2026-02-21T20:35:00.055Z'
+    },
+    {
+      id: 20,
+      checkoutId: '64837701370224',
+      email: 'syedfaiz.rizvi@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN93CFueGN0xfocHIUUMIke/recover?key=6c5c1d9d3627c253de3e4dda886f91bb&locale=en-IN',
+      cartValue: 620,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T20:14:38.065Z',
+      updatedAt: '2026-02-21T20:20:00.296Z'
+    },
+    {
+      id: 17,
+      checkoutId: '64837300420976',
+      email: 'yadveerdhillon23@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN9316kuv2exCJi33V0BrD2/recover?key=7bbcddc955123189bc2785576ccebae0&locale=en-IN',
+      cartValue: 499,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T18:26:30.642Z',
+      updatedAt: '2026-02-21T18:30:00.621Z'
+    },
+    {
+      id: 15,
+      checkoutId: '64837148672368',
+      email: 'faizkhanindian676@gmail.com',
+      firstName: 'Faiz',
+      lastName: 'Ahmad',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92wv7bEtw124G9kl6y8kW/recover?key=bb5980819b6b5c5009ddba7fb2613f68&locale=en-IN',
+      cartValue: 1189,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T17:43:13.332Z',
+      updatedAt: '2026-02-21T17:50:00.737Z'
+    },
+    {
+      id: 13,
+      checkoutId: '64837146280304',
+      email: 'faizkhanindian676@gmail.com',
+      firstName: 'Faiz',
+      lastName: 'Ahmad',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92wobgZkf7OhbUGbnPI8a/recover?key=1954975ca53712cc6c60192c8fd43345&locale=en-IN',
+      cartValue: 499,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T17:43:10.558Z',
+      updatedAt: '2026-02-21T17:50:00.303Z'
+    },
+    {
+      id: 10,
+      checkoutId: '64836616323440',
+      email: 'chaitralip82@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92iYJ2XipvI4yYefFs2Bo/recover?key=a792ef2cc752b1a4562fcd25e6ced365&locale=en-IN',
+      cartValue: 499,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T15:23:02.620Z',
+      updatedAt: '2026-02-21T15:30:00.703Z'
+    },
+    {
+      id: 9,
+      checkoutId: '64836077519216',
+      email: 'Shaizqurashi12345@gmail.com',
+      firstName: 'Ali',
+      lastName: '.',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92SYYNhAsPpVMVsCJTAw8/recover?key=6b2f3a414b1e97cc6e5049b7aa07eeac&locale=en-IN',
+      cartValue: 499,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T12:44:47.003Z',
+      updatedAt: '2026-02-21T12:50:00.904Z'
+    },
+    {
+      id: 8,
+      checkoutId: '64836060217712',
+      email: 'Shaizqurashi12345@gmail.com',
+      firstName: 'Ali',
+      lastName: '.',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92RyMpqAnhhfwLbszfpe0/recover?key=dbecb33b257cf655884e40a374249a26&locale=en-IN',
+      cartValue: 499,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T12:38:25.734Z',
+      updatedAt: '2026-02-21T12:45:00.591Z'
+    },
+    {
+      id: 5,
+      checkoutId: '64836008018288',
+      email: 'Shaizqurashi12345@gmail.com',
+      firstName: 'Ali',
+      lastName: '.',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92QSdwdoqZoN1fPd42EVw/recover?key=24e4b8d3c949e1e2acb5e2369fc1f3cc&locale=en-IN',
+      cartValue: 520,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T12:24:21.175Z',
+      updatedAt: '2026-02-21T12:30:00.830Z'
+    },
+    {
+      id: 4,
+      checkoutId: '64835872653680',
+      email: 'Shaizqurashi12345@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92LgnOQGqFkZVsTs9XLqG/recover?key=4546c3a099656246de393f6a0f09e6e0&locale=en-IN',
+      cartValue: 1450,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T11:36:13.892Z',
+      updatedAt: '2026-02-21T11:40:00.715Z'
+    },
+    {
+      id: 3,
+      checkoutId: '64835860562288',
+      email: 'Shaizqurashi12345@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92LGSFUljAWpGX3tMcgS4/recover?key=90f8edd3515bf0fad5ec09d6bfdd3a21&locale=en-IN',
+      cartValue: 1450,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T11:31:56.232Z',
+      updatedAt: '2026-02-21T11:35:00.318Z'
+    },
+    {
+      id: 2,
+      checkoutId: '64835691217264',
+      email: 'tabussmara@gmail.com',
+      firstName: '',
+      lastName: '',
+      recoveryUrl: 'https://velomora.com/95293964656/checkouts/ac/hWN92FivRW0VCEPd6suXUwUu/recover?key=1f05b512bd7b679616f8b19d18ed89c3&locale=en-IN',
+      cartValue: 1489,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T11:07:08.225Z',
+      updatedAt: '2026-02-21T11:10:00.398Z'
+    },
+    {
+      id: 1,
+      checkoutId: '981820079255243500',
+      email: 'example@email.com',
+      firstName: 'John',
+      lastName: 'Smith',
+      recoveryUrl: 'https://checkout.shopify.com/95293964656/checkouts/123123123/recover?key=example-secret-token',
+      cartValue: 1019,
+      currency: 'INR',
+      status: 'abandoned',
+      orderId: null,
+      snovSentAt: null,
+      createdAt: '2026-02-21T10:53:45.768Z',
+      updatedAt: '2026-02-21T11:00:00.818Z'
+    }
+  ]
+}
+
+=== Test 4: Create Test Order ===
+❌ POST /test/order: {
+  error: '\n' +
+    'Invalid `prisma.order.create()` invocation in\n' +
+    '/Users/alikhusroo/Projects/lacleoomnia-auto/LaCleoOmnia-auto/src/routes/test.js:41:38\n' +
+    '\n' +
+    "  38   return res.status(400).json({ error: 'orderId and email are required' });\n" +
+    '  39 }\n' +
+    '  40 \n' +
+    '→ 41 const order = await prisma.order.create(\n' +
+    'Unique constraint failed on the fields: (`orderId`)'
+}
+
+=== Test 5: List Orders ===
+✅ GET /test/orders: {
+  success: true,
+  count: 39,
+  orders: [
+    {
+      id: 84,
+      orderId: 'test-order-001',
+      email: 'test1@example.com',
+      totalPrice: 150,
+      currency: 'USD',
+      snovSentAt: null,
+      createdAt: '2026-02-23T07:09:07.068Z'
+    },
+    {
+      id: 83,
+      orderId: '11923839451504',
+      email: 'cdhar4u@gmail.com',
+      totalPrice: 540,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T06:28:19.291Z'
+    },
+    {
+      id: 82,
+      orderId: '11923809468784',
+      email: 'monica7209tirkey@gmail.com',
+      totalPrice: 486,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:45:15.513Z'
+    },
+    {
+      id: 81,
+      orderId: '11923778863472',
+      email: 'manasatanuja09@gmail.com',
+      totalPrice: 449.1,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:04:28.009Z'
+    },
+    {
+      id: 80,
+      orderId: '11923777487216',
+      email: 'adicute6@gmail.com',
+      totalPrice: 486,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:02:47.611Z'
+    },
+    {
+      id: 79,
+      orderId: '11923776274800',
+      email: 'simranmaheshwari1234@gmail.com',
+      totalPrice: 540,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:01:24.419Z'
+    },
+    {
+      id: 78,
+      orderId: '11923775357296',
+      email: 'mansishahmns@gmail.com',
+      totalPrice: 558,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T04:59:40.729Z'
+    },
+    {
+      id: 76,
+      orderId: '11923770769776',
+      email: 'pritimoharir@gmail.com',
+      totalPrice: 558,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T04:53:51.403Z'
+    },
+    {
+      id: 73,
+      orderId: '11923676889456',
+      email: 'preranapensalwar7@gmail.com',
+      totalPrice: 499,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T02:51:47.622Z'
+    },
+    {
+      id: 69,
+      orderId: '11923640353136',
+      email: 'nainagupta0504@gmail.com',
+      totalPrice: 449.1,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T02:07:06.150Z'
+    },
+    {
+      id: 66,
+      orderId: '11923620823408',
+      email: 'prachi.kolomkar@unigoa.ac.in',
+      totalPrice: 449.1,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-23T01:42:54.089Z'
+    },
+    {
+      id: 62,
+      orderId: '11923353665904',
+      email: 'jainmegha499@gmail.com',
+      totalPrice: 558,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T21:05:23.911Z'
+    },
+    {
+      id: 59,
+      orderId: '11923290063216',
+      email: 'rekhi.shivali@gmail.com',
+      totalPrice: 801,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T20:07:16.759Z'
+    },
+    {
+      id: 58,
+      orderId: '11923125535088',
+      email: 'addlasoniya69@gmail.com',
+      totalPrice: 540,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T17:58:21.646Z'
+    },
+    {
+      id: 57,
+      orderId: '11923112264048',
+      email: 'Keshviivayla@gmail.com',
+      totalPrice: 620,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T17:46:16.408Z'
+    },
+    {
+      id: 56,
+      orderId: '11923111018864',
+      email: 'lathaammu973@gmail.com',
+      totalPrice: 620,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T17:45:10.046Z'
+    },
+    {
+      id: 53,
+      orderId: '11923099779440',
+      email: 'khandekartanvi13@gmail.com',
+      totalPrice: 486,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T17:36:34.133Z'
+    },
+    {
+      id: 50,
+      orderId: '11923032211824',
+      email: 'aakritiguleria123@gmail.com',
+      totalPrice: 499,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T16:36:33.364Z'
+    },
+    {
+      id: 47,
+      orderId: '11922955731312',
+      email: 'cutepriti0497@gmail.com',
+      totalPrice: 486,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T15:09:23.093Z'
+    },
+    {
+      id: 44,
+      orderId: '11922773868912',
+      email: 'mehakagl.bly@gmail.com',
+      totalPrice: 540,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T10:44:13.939Z'
+    },
+    {
+      id: 43,
+      orderId: '11922703843696',
+      email: 'mahimaj94@gmail.com',
+      totalPrice: 486,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:45:57.756Z'
+    },
+    {
+      id: 39,
+      orderId: '11922688344432',
+      email: 'mahakgidwani3689@gmail.com',
+      totalPrice: 558,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:19:05.518Z'
+    },
+    {
+      id: 37,
+      orderId: '11922688409968',
+      email: 'jeevajothisnadar@gmail.com',
+      totalPrice: 540,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:19:04.941Z'
+    },
+    {
+      id: 36,
+      orderId: '11922615107952',
+      email: 'diyashinge@gmail.com',
+      totalPrice: 499,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T06:22:00.772Z'
+    },
+    {
+      id: 33,
+      orderId: '11922614124912',
+      email: 'srividhya.rangaram@live.com',
+      totalPrice: 948.6,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T06:21:40.843Z'
+    },
+    {
+      id: 32,
+      orderId: '11922575065456',
+      email: 'muku99433@gmail.com',
+      totalPrice: 540,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T05:29:43.500Z'
+    },
+    {
+      id: 29,
+      orderId: '11922554454384',
+      email: 'rathourpriyanka95@gmail.com',
+      totalPrice: 499,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T05:07:17.414Z'
+    },
+    {
+      id: 26,
+      orderId: '11922536006000',
+      email: 'sanchi05@gmail.com',
+      totalPrice: 1610.1,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T04:42:10.828Z'
+    },
+    {
+      id: 23,
+      orderId: '11922439405936',
+      email: 'anilajosephpg@gmail.com',
+      totalPrice: 620,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-22T02:46:36.991Z'
+    },
+    {
+      id: 20,
+      orderId: '11922197119344',
+      email: 'syedfaiz.rizvi@gmail.com',
+      totalPrice: 620,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T22:57:05.187Z'
+    },
+    {
+      id: 19,
+      orderId: '11922022236528',
+      email: 'tanya.sharma0899@gmail.com',
+      totalPrice: 540,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T20:31:03.343Z'
+    },
+    {
+      id: 16,
+      orderId: '11921990648176',
+      email: 'viju.koku@gmail.com',
+      totalPrice: 486,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T20:06:53.289Z'
+    },
+    {
+      id: 12,
+      orderId: '11921902076272',
+      email: 'pmeghana981@gmail.com',
+      totalPrice: 499,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T19:04:15.986Z'
+    },
+    {
+      id: 11,
+      orderId: '11921795580272',
+      email: 'jaydarpanpatel@gmail.com',
+      totalPrice: 1044,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T17:51:46.458Z'
+    },
+    {
+      id: 10,
+      orderId: '11921755341168',
+      email: 'deeksha240993@gmail.com',
+      totalPrice: 486,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T17:20:57.444Z'
+    },
+    {
+      id: 6,
+      orderId: '11921731027312',
+      email: 'cvaliyadav@gmail.com',
+      totalPrice: 499,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T17:04:54.765Z'
+    },
+    {
+      id: 5,
+      orderId: '11921692393840',
+      email: 'younus.iftekhar@gmail.com',
+      totalPrice: 499,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T16:30:22.963Z'
+    },
+    {
+      id: 2,
+      orderId: '11921558864240',
+      email: 'spoorthinotagar08@gmail.com',
+      totalPrice: 499,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T14:22:28.604Z'
+    },
+    {
+      id: 1,
+      orderId: '11921453613424',
+      email: 'thakurhitesh550@gmail.com',
+      totalPrice: 449.1,
+      currency: 'INR',
+      snovSentAt: null,
+      createdAt: '2026-02-21T12:07:23.529Z'
+    }
+  ]
+}
+
+=== Test 6: Create Test Customer ===
+❌ POST /test/customer: {
+  error: '\n' +
+    'Invalid `prisma.customer.create()` invocation in\n' +
+    '/Users/alikhusroo/Projects/lacleoomnia-auto/LaCleoOmnia-auto/src/routes/test.js:67:44\n' +
+    '\n' +
+    "  64   return res.status(400).json({ error: 'shopifyCustomerId and email are required' });\n" +
+    '  65 }\n' +
+    '  66 \n' +
+    '→ 67 const customer = await prisma.customer.create(\n' +
+    'Unique constraint failed on the fields: (`shopifyCustomerId`)'
+}
+
+=== Test 7: List Customers ===
+✅ GET /test/customers: {
+  success: true,
+  count: 50,
+  customers: [
+    {
+      id: 94,
+      shopifyCustomerId: 'customer-12345',
+      email: 'newcustomer@example.com',
+      firstName: 'Diana',
+      lastName: 'Prince',
+      snovSentAt: null,
+      createdAt: '2026-02-23T07:09:09.158Z'
+    },
+    {
+      id: 93,
+      shopifyCustomerId: '24235809571184',
+      email: 'cdhar4u@gmail.com',
+      firstName: 'Chaity',
+      lastName: 'Bagchi',
+      snovSentAt: null,
+      createdAt: '2026-02-23T06:28:16.982Z'
+    },
+    {
+      id: 90,
+      shopifyCustomerId: '24235791057264',
+      email: 'thengadesayali94@gmail.com',
+      firstName: '',
+      lastName: '',
+      snovSentAt: null,
+      createdAt: '2026-02-23T06:10:11.247Z'
+    },
+    {
+      id: 89,
+      shopifyCustomerId: '24235764318576',
+      email: 'monica7209tirkey@gmail.com',
+      firstName: 'Monica',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:45:13.505Z'
+    },
+    {
+      id: 88,
+      shopifyCustomerId: '24235703075184',
+      email: 'phutelaravina@gmail.com',
+      firstName: 'Ravina',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:05:32.413Z'
+    },
+    {
+      id: 87,
+      shopifyCustomerId: '24235701731696',
+      email: 'manasatanuja09@gmail.com',
+      firstName: 'Manasa',
+      lastName: 'N',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:04:25.553Z'
+    },
+    {
+      id: 86,
+      shopifyCustomerId: '24235700126064',
+      email: 'adicute6@gmail.com',
+      firstName: 'Adithi',
+      lastName: 'Gowda',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:02:45.516Z'
+    },
+    {
+      id: 85,
+      shopifyCustomerId: '24235697897840',
+      email: 'simranmaheshwari1234@gmail.com',
+      firstName: 'Kumar',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-23T05:01:17.317Z'
+    },
+    {
+      id: 84,
+      shopifyCustomerId: '24235695866224',
+      email: 'mansishahmns@gmail.com',
+      firstName: 'Mansi',
+      lastName: 'shah',
+      snovSentAt: null,
+      createdAt: '2026-02-23T04:59:38.691Z'
+    },
+    {
+      id: 81,
+      shopifyCustomerId: '24235690066288',
+      email: 'pritimoharir@gmail.com',
+      firstName: 'Priti',
+      lastName: 'Moharir',
+      snovSentAt: null,
+      createdAt: '2026-02-23T04:53:51.402Z'
+    },
+    {
+      id: 78,
+      shopifyCustomerId: '24235544871280',
+      email: 'preranapensalwar7@gmail.com',
+      firstName: 'Prerana',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-23T02:51:48.146Z'
+    },
+    {
+      id: 74,
+      shopifyCustomerId: '24235487592816',
+      email: 'nainagupta0504@gmail.com',
+      firstName: 'Kaira',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-23T02:07:05.974Z'
+    },
+    {
+      id: 71,
+      shopifyCustomerId: '24235458265456',
+      email: 'prachi.kolomkar@unigoa.ac.in',
+      firstName: 'Prachi',
+      lastName: 'Kolamker',
+      snovSentAt: null,
+      createdAt: '2026-02-23T01:42:54.260Z'
+    },
+    {
+      id: 68,
+      shopifyCustomerId: '24234998202736',
+      email: 'rekhi.shivali@gmail.com',
+      firstName: 'Shivali',
+      lastName: 'Rekhi',
+      snovSentAt: null,
+      createdAt: '2026-02-22T20:07:16.435Z'
+    },
+    {
+      id: 67,
+      shopifyCustomerId: '24234801824112',
+      email: 'Keshviivayla@gmail.com',
+      firstName: 'Keahvi',
+      lastName: 'Vayla',
+      snovSentAt: null,
+      createdAt: '2026-02-22T17:46:12.658Z'
+    },
+    {
+      id: 66,
+      shopifyCustomerId: '24234800316784',
+      email: 'lathaammu973@gmail.com',
+      firstName: 'Latha',
+      lastName: 'Ammu',
+      snovSentAt: null,
+      createdAt: '2026-02-22T17:45:07.318Z'
+    },
+    {
+      id: 63,
+      shopifyCustomerId: '24234593419632',
+      email: 'cutepriti0497@gmail.com',
+      firstName: 'Priti',
+      lastName: 'Vishwakarma',
+      snovSentAt: null,
+      createdAt: '2026-02-22T15:09:23.094Z'
+    },
+    {
+      id: 62,
+      shopifyCustomerId: '24234465853808',
+      email: 'Ashvinimore987@gmail.com',
+      firstName: 'Ashwini',
+      lastName: 'More',
+      snovSentAt: null,
+      createdAt: '2026-02-22T13:12:32.583Z'
+    },
+    {
+      id: 61,
+      shopifyCustomerId: '24234453369200',
+      email: 'kapkriti60@gmail.com',
+      firstName: 'Kiran',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-22T12:57:32.565Z'
+    },
+    {
+      id: 60,
+      shopifyCustomerId: '24234449764720',
+      email: 'pooja24081985@gmail.com',
+      firstName: 'Rama',
+      lastName: 'Chouhan',
+      snovSentAt: null,
+      createdAt: '2026-02-22T12:53:32.905Z'
+    },
+    {
+      id: 59,
+      shopifyCustomerId: '24234404807024',
+      email: 'jainmegha499@gmail.com',
+      firstName: 'Meghana',
+      lastName: 'Jain',
+      snovSentAt: null,
+      createdAt: '2026-02-22T11:56:32.722Z'
+    },
+    {
+      id: 56,
+      shopifyCustomerId: '24234355622256',
+      email: 'mehakagl.bly@gmail.com',
+      firstName: 'Mehak',
+      lastName: 'Agarwal',
+      snovSentAt: null,
+      createdAt: '2026-02-22T10:44:13.840Z'
+    },
+    {
+      id: 55,
+      shopifyCustomerId: '24234266100080',
+      email: 'mahimaj94@gmail.com',
+      firstName: 'Mahima',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:45:55.559Z'
+    },
+    {
+      id: 54,
+      shopifyCustomerId: '24234259546480',
+      email: 'arzoochaudhary89@gmail.com',
+      firstName: 'Arzoo',
+      lastName: 'Chaudhary',
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:36:04.467Z'
+    },
+    {
+      id: 49,
+      shopifyCustomerId: '24234246668656',
+      email: 'jeevajothisnadar@gmail.com',
+      firstName: 'Jeevajothi',
+      lastName: 'Nadar',
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:19:05.108Z'
+    },
+    {
+      id: 48,
+      shopifyCustomerId: '24234246472048',
+      email: 'mahakgidwani3689@gmail.com',
+      firstName: 'Mahak',
+      lastName: 'Gidwani',
+      snovSentAt: null,
+      createdAt: '2026-02-22T08:19:04.940Z'
+    },
+    {
+      id: 47,
+      shopifyCustomerId: '24234227040624',
+      email: 'pranjalithakare09@gmail.com',
+      firstName: 'Nathu',
+      lastName: 'P Thakare',
+      snovSentAt: null,
+      createdAt: '2026-02-22T07:54:02.562Z'
+    },
+    {
+      id: 44,
+      shopifyCustomerId: '24234205053296',
+      email: 'thengadesayali@gmail.com',
+      firstName: '',
+      lastName: '',
+      snovSentAt: null,
+      createdAt: '2026-02-22T07:33:20.192Z'
+    },
+    {
+      id: 43,
+      shopifyCustomerId: '24234145022320',
+      email: 'diyashinge@gmail.com',
+      firstName: 'Diya',
+      lastName: 'Shinge',
+      snovSentAt: null,
+      createdAt: '2026-02-22T06:21:58.439Z'
+    },
+    {
+      id: 40,
+      shopifyCustomerId: '24234143842672',
+      email: 'srividhya.rangaram@live.com',
+      firstName: 'Srirupa',
+      lastName: 'Madhavi Devi Dasi',
+      snovSentAt: null,
+      createdAt: '2026-02-22T06:21:40.843Z'
+    },
+    {
+      id: 39,
+      shopifyCustomerId: '24234087383408',
+      email: 'Kukupatel55469@gmail.com',
+      firstName: 'Kruti',
+      lastName: 'Jignesh Patel',
+      snovSentAt: null,
+      createdAt: '2026-02-22T05:32:03.911Z'
+    },
+    {
+      id: 38,
+      shopifyCustomerId: '24234085581168',
+      email: 'muku99433@gmail.com',
+      firstName: 'Kuromi',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-22T05:29:41.072Z'
+    },
+    {
+      id: 35,
+      shopifyCustomerId: '24234064380272',
+      email: 'rathourpriyanka95@gmail.com',
+      firstName: 'Priyanka',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-22T05:07:17.597Z'
+    },
+    {
+      id: 32,
+      shopifyCustomerId: '24234041016688',
+      email: 'sanchi05@gmail.com',
+      firstName: 'Sanchita',
+      lastName: 'Saikia',
+      snovSentAt: null,
+      createdAt: '2026-02-22T04:42:10.829Z'
+    },
+    {
+      id: 31,
+      shopifyCustomerId: '24234014966128',
+      email: 'shwetakhare67@gmail.com',
+      firstName: 'Shweta',
+      lastName: 'Khare',
+      snovSentAt: null,
+      createdAt: '2026-02-22T04:16:02.455Z'
+    },
+    {
+      id: 30,
+      shopifyCustomerId: '24233987965296',
+      email: 'addlasoniya69@gmail.com',
+      firstName: 'Soniya',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-22T03:51:34.950Z'
+    },
+    {
+      id: 27,
+      shopifyCustomerId: '24233910403440',
+      email: 'anilajosephpg@gmail.com',
+      firstName: 'Anila',
+      lastName: 'Joseph',
+      snovSentAt: null,
+      createdAt: '2026-02-22T02:46:36.817Z'
+    },
+    {
+      id: 26,
+      shopifyCustomerId: '24233414918512',
+      email: 'tanya.sharma0899@gmail.com',
+      firstName: 'Tanya',
+      lastName: 'Sharma',
+      snovSentAt: null,
+      createdAt: '2026-02-21T20:30:56.787Z'
+    },
+    {
+      id: 25,
+      shopifyCustomerId: '24233405743472',
+      email: 'syedfaiz.rizvi@gmail.com',
+      firstName: 'Faiz',
+      lastName: 'Rizvi',
+      snovSentAt: null,
+      createdAt: '2026-02-21T20:25:08.032Z'
+    },
+    {
+      id: 22,
+      shopifyCustomerId: '24233379692912',
+      email: 'viju.koku@gmail.com',
+      firstName: 'Sweta',
+      lastName: 'Agarwal',
+      snovSentAt: null,
+      createdAt: '2026-02-21T20:06:52.795Z'
+    },
+    {
+      id: 18,
+      shopifyCustomerId: '24233286107504',
+      email: 'pmeghana981@gmail.com',
+      firstName: 'Meghana',
+      lastName: 'Patil',
+      snovSentAt: null,
+      createdAt: '2026-02-21T19:04:15.986Z'
+    },
+    {
+      id: 17,
+      shopifyCustomerId: '24233242296688',
+      email: 'yadveerdhillon23@gmail.com',
+      firstName: 'Yadveer',
+      lastName: 'Dhillon',
+      snovSentAt: null,
+      createdAt: '2026-02-21T18:36:05.423Z'
+    },
+    {
+      id: 16,
+      shopifyCustomerId: '24233160311152',
+      email: 'jaydarpanpatel@gmail.com',
+      firstName: 'JAY',
+      lastName: 'PATEL',
+      snovSentAt: null,
+      createdAt: '2026-02-21T17:51:43.788Z'
+    },
+    {
+      id: 15,
+      shopifyCustomerId: '24233109389680',
+      email: 'deeksha240993@gmail.com',
+      firstName: 'Deeksha',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-21T17:20:54.551Z'
+    },
+    {
+      id: 11,
+      shopifyCustomerId: '24233082880368',
+      email: 'cvaliyadav@gmail.com',
+      firstName: 'Advocate',
+      lastName: 'Shivali',
+      snovSentAt: null,
+      createdAt: '2026-02-21T17:04:54.766Z'
+    },
+    {
+      id: 8,
+      shopifyCustomerId: '24233027174768',
+      email: 'poojithaa.reddyyy11@gmail.com',
+      firstName: '',
+      lastName: '',
+      snovSentAt: null,
+      createdAt: '2026-02-21T16:25:15.760Z'
+    },
+    {
+      id: 7,
+      shopifyCustomerId: '24232955773296',
+      email: 'chaitralip82@gmail.com',
+      firstName: 'Chaitrali',
+      lastName: 'Pawar',
+      snovSentAt: null,
+      createdAt: '2026-02-21T15:33:06.050Z'
+    },
+    {
+      id: 4,
+      shopifyCustomerId: '24232861892976',
+      email: 'spoorthinotagar08@gmail.com',
+      firstName: 'Spoorthinotagar',
+      lastName: '.',
+      snovSentAt: null,
+      createdAt: '2026-02-21T14:22:28.524Z'
+    },
+    {
+      id: 3,
+      shopifyCustomerId: '24232774664560',
+      email: 'hirawatsrishti@gmail.com',
+      firstName: '',
+      lastName: '',
+      snovSentAt: null,
+      createdAt: '2026-02-21T12:57:19.664Z'
+    },
+    {
+      id: 2,
+      shopifyCustomerId: '24232730820976',
+      email: 'thakurhitesh550@gmail.com',
+      firstName: 'Hitesh',
+      lastName: 'Thakur',
+      snovSentAt: null,
+      createdAt: '2026-02-21T12:07:20.669Z'
+    }
+  ]
+}
+
+=== Test 8: Webhook with Valid HMAC (Checkout) ===
+✅ /webhook/checkout: { success: true }
+
+=== Test 9: Webhook with Invalid HMAC ===
+✅ Correctly rejected invalid HMAC
+
+=== Test 10: Idempotency (Duplicate Checkout) ===
+✅ POST /test/checkout: {
+  success: true,
+  checkout: {
+    id: 58,
+    checkoutId: 'idempotent-001',
+    email: 'same@example.com',
+    firstName: 'Same',
+    lastName: 'User',
+    recoveryUrl: 'https://test-recovery.com/checkout/idempotent-001',
+    cartValue: 100,
+    currency: 'USD',
+    status: 'pending',
+    orderId: null,
+    snovSentAt: null,
+    createdAt: '2026-02-23T07:09:10.218Z',
+    updatedAt: '2026-02-23T07:10:09.612Z'
+  }
+}
+✅ POST /test/checkout: {
+  success: true,
+  checkout: {
+    id: 58,
+    checkoutId: 'idempotent-001',
+    email: 'same@example.com',
+    firstName: 'Same',
+    lastName: 'User',
+    recoveryUrl: 'https://test-recovery.com/checkout/idempotent-001',
+    cartValue: 100,
+    currency: 'USD',
+    status: 'pending',
+    orderId: null,
+    snovSentAt: null,
+    createdAt: '2026-02-23T07:09:10.218Z',
+    updatedAt: '2026-02-23T07:10:09.885Z'
+  }
+}
+
+=== Summary ===
+✅ Passed: 10
+❌ Failed: 2
+Total: 12
+
+⚠️  Some tests failed
+

@@ -26,6 +26,18 @@ class CustomerService {
       throw error;
     }
   }
+
+  async updateSnovSentAt(shopifyCustomerId) {
+    try {
+      return await prisma.customer.update({
+        where: { shopifyCustomerId },
+        data: { snovSentAt: new Date() }
+      });
+    } catch (error) {
+      logger.error(`Failed to update snovSentAt for customer ${shopifyCustomerId}:`, error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new CustomerService();
