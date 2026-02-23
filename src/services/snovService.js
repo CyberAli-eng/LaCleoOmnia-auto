@@ -47,12 +47,10 @@ class SnovService {
 
     const token = await this.getAccessToken();
 
-    const payload = {
-      listId: Number(listId),
-      email: email,
-      firstName: firstName || '',
-      lastName: lastName || ''
-    };
+    if (!email || email === 'null' || !email.includes('@')) {
+      logger.warn(`SNOV SKIP → Invalid email: ${email}`);
+      return { success: true, skipped: true, reason: 'invalid_email' };
+    }
 
     logger.info(`SNOV SEND → list=${listId} email=${email}`);
 
@@ -71,7 +69,21 @@ class SnovService {
       logger.info(`SNOV SUCCESS → ${email}`, response.data);
       return response.data;
     } catch (error) {
-      logger.error('SNOV FAIL', error.response?.data || error.message);
+      const errorData = error.response?.data;
+
+      // If prospect already exists, treat as success to prevent infinite retries
+      if (error.response?.status === 422 && errorData?.errors?.includes('already exists')) {
+        logger.info(`SNOV SUCCESS (ALREADY EXISTS) → ${email}`);
+        return { success: true, alreadyExists: true };
+      }
+
+      // If Snov cannot process this email (e.g. bounce/invalid), skip it permanently
+      if (error.response?.status === 400 && errorData?.message?.includes('can not process this email')) {
+        logger.warn(`SNOV SKIP (INVALID) → ${email}: ${errorData.message}`);
+        return { success: true, skipped: true, reason: 'snov_rejected' };
+      }
+
+      logger.error('SNOV FAIL', errorData || error.message);
       throw error;
     }
   }
