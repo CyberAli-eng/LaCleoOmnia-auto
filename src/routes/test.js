@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../config/prisma');
 const checkoutService = require('../services/checkoutService');
+const snovService = require('../services/snovService');
 const { logger } = require('../utils/logger');
 
 router.post('/checkout', async (req, res) => {
@@ -123,11 +124,33 @@ router.delete('/reset', async (req, res) => {
     await prisma.checkout.deleteMany({});
     await prisma.order.deleteMany({});
     await prisma.customer.deleteMany({});
-    
+
     logger.info('Database reset successfully');
     res.json({ success: true, message: 'All data deleted' });
   } catch (error) {
     logger.error('Reset error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/snov', async (req, res) => {
+  try {
+    const { email, firstName, lastName } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: 'email is required' });
+    }
+
+    logger.info(`Test: Adding prospect to Snov abandoned list for ${email}`);
+    const result = await snovService.triggerAbandoned(email, firstName || 'Test', lastName || 'User', {
+      recoveryUrl: 'https://example.com/recover',
+      cartValue: '100.00',
+      currency: 'USD'
+    });
+
+    res.json({ success: true, result });
+  } catch (error) {
+    logger.error('Test Snov error:', error);
     res.status(500).json({ error: error.message });
   }
 });

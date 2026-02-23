@@ -57,7 +57,10 @@ class WebhookController {
 
       logger.info('Triggering upsell campaign');
       try {
-        await snovService.sendUpsellCampaign(orderData);
+        const checkout = await prisma.checkout.findFirst({
+          where: { email: orderData.email }
+        });
+        await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '', orderData);
       } catch (snovError) {
         logger.error('Snov upsell campaign failed (non-blocking):', snovError.message);
       }
@@ -91,7 +94,7 @@ class WebhookController {
 
       logger.info('Triggering welcome campaign');
       try {
-        await snovService.sendWelcomeCampaign(customerData);
+        await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName);
       } catch (snovError) {
         logger.error('Snov welcome campaign failed (non-blocking):', snovError.message);
       }

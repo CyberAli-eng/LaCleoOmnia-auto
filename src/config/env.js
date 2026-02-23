@@ -6,7 +6,10 @@ function validateEnv() {
     'SHOPIFY_WEBHOOK_SECRET',
     'SHOPIFY_STORE_DOMAIN',
     'SNOV_CLIENT_ID',
-    'SNOV_CLIENT_SECRET'
+    'SNOV_CLIENT_SECRET',
+    'SNOV_LIST_ABANDONED',
+    'SNOV_LIST_UPSELL',
+    'SNOV_LIST_WELCOME'
   ];
 
   const missing = required.filter(key => !process.env[key]);
@@ -29,10 +32,10 @@ const config = {
   snov: {
     clientId: process.env.SNOV_CLIENT_ID,
     clientSecret: process.env.SNOV_CLIENT_SECRET,
-    campaigns: {
-      abandoned: process.env.SNOV_CAMPAIGN_ABANDONED,
-      upsell: process.env.SNOV_CAMPAIGN_UPSELL,
-      welcome: process.env.SNOV_CAMPAIGN_WELCOME
+    lists: {
+      abandoned: process.env.SNOV_LIST_ABANDONED,
+      upsell: process.env.SNOV_LIST_UPSELL,
+      welcome: process.env.SNOV_LIST_WELCOME
     },
     mock: process.env.MOCK_SNOV === 'true'
   },

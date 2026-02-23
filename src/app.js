@@ -44,6 +44,7 @@ app.get('/', (req, res) => {
         'GET /test/checkouts',
         'GET /test/orders',
         'GET /test/customers',
+        'POST /test/snov',
         'DELETE /test/reset'
       ]
     }

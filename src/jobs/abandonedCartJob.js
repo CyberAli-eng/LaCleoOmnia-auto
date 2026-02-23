@@ -26,8 +26,8 @@ function startAbandonedCartJob() {
           await checkoutService.markAsAbandoned(checkout.checkoutId);
 
           logger.info(`Triggering abandoned cart campaign for: ${checkout.email}`);
-          await snovService.sendAbandonedCartCampaign(checkout);
-          
+          await snovService.triggerAbandoned(checkout.email, checkout.firstName, checkout.lastName, checkout);
+
           logger.info(`Abandoned cart processed: ${checkout.checkoutId}`);
         } catch (error) {
           logger.error(`Failed to process abandoned checkout ${checkout.checkoutId}:`, error.message);
