@@ -2,6 +2,7 @@ const checkoutService = require('../services/checkoutService');
 const orderService = require('../services/orderService');
 const snovService = require('../services/snovService');
 const customerService = require('../services/customerService');
+const prisma = require('../config/prisma');
 const { logger } = require('../utils/logger');
 
 class WebhookController {

@@ -56,10 +56,16 @@ class SnovService {
         listId: Number(listId),
         email: email,
         firstName: firstName || '',
-        lastName: lastName || '',
-        fullName: `${firstName || ''} ${lastName || ''}`.trim(),
-        customFields: customFields
+        lastName: lastName || ''
       };
+
+      if (firstName || lastName) {
+        payload.fullName = `${firstName || ''} ${lastName || ''}`.trim();
+      }
+
+      if (customFields && Object.keys(customFields).length > 0) {
+        payload.customFields = customFields;
+      }
 
       logger.info(`Adding prospect to Snov list ${listId} for ${email}`);
 
