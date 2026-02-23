@@ -52,6 +52,13 @@ class SnovService {
       return { success: true, skipped: true, reason: 'invalid_email' };
     }
 
+    const payload = {
+      listId: Number(listId),
+      email: email,
+      firstName: firstName || '',
+      lastName: lastName || ''
+    };
+
     logger.info(`SNOV SEND → list=${listId} email=${email}`);
 
     try {
@@ -72,7 +79,7 @@ class SnovService {
       const errorData = error.response?.data;
 
       // If prospect already exists, treat as success to prevent infinite retries
-      if (error.response?.status === 422 && errorData?.errors?.includes('already exists')) {
+      if (error.response?.status === 422 && (errorData?.errors?.includes('already exists') || errorData?.errors === 'Prospect with same email already exists in your list')) {
         logger.info(`SNOV SUCCESS (ALREADY EXISTS) → ${email}`);
         return { success: true, alreadyExists: true };
       }
