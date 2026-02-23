@@ -141,12 +141,8 @@ router.post('/snov', async (req, res) => {
       return res.status(400).json({ error: 'email is required' });
     }
 
-    logger.info(`Test: Adding prospect to Snov abandoned list for ${email}`);
-    const result = await snovService.triggerAbandoned(email, firstName || 'Test', lastName || 'User', {
-      recoveryUrl: 'https://example.com/recover',
-      cartValue: '100.00',
-      currency: 'USD'
-    });
+    logger.info(`Test Snov: Pushing ${email} to abandoned list`);
+    const result = await snovService.triggerAbandoned(email, firstName || 'Test', lastName || 'User');
 
     res.json({ success: true, result });
   } catch (error) {

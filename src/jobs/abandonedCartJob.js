@@ -32,13 +32,10 @@ function startAbandonedCartJob() {
           if (currentCheckout && currentCheckout.status === 'pending' && !currentCheckout.snovSentAt) {
             await checkoutService.markAsAbandoned(checkout.checkoutId);
 
-            logger.info(`Triggering abandoned cart campaign for: ${checkout.email}`);
-            const result = await snovService.triggerAbandoned(checkout.email, checkout.firstName, checkout.lastName, checkout);
-
-            if (result && (result.success !== false)) {
-              await checkoutService.updateSnovSentAt(checkout.checkoutId);
-              logger.info(`Abandoned cart processed and snovSentAt updated: ${checkout.checkoutId}`);
-            }
+            logger.info(`Processing checkout ${checkout.checkoutId}`);
+            await snovService.triggerAbandoned(checkout.email, checkout.firstName, checkout.lastName);
+            await checkoutService.updateSnovSentAt(checkout.checkoutId);
+            logger.info(`Checkout synced to Snov`);
           } else {
             logger.info(`Checkout ${checkout.checkoutId} already processed, converted, or sent to Snov, skipping`);
           }

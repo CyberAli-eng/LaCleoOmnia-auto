@@ -67,13 +67,10 @@ class WebhookController {
             where: { email: orderData.email }
           });
 
-          logger.info(`Adding prospect to Snov upsell list for ${orderData.email}`);
-          const result = await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '', orderData);
-
-          if (result && (result.success !== false)) {
-            await orderService.updateSnovSentAt(orderData.orderId);
-            logger.info('Upsell campaign triggered and snovSentAt updated');
-          }
+          logger.info(`Processing order ${orderData.orderId}`);
+          await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '');
+          await orderService.updateSnovSentAt(orderData.orderId);
+          logger.info(`Checkout synced to Snov`);
         } else {
           logger.info(`Upsell campaign already sent for order ${orderData.orderId}, skipping`);
         }
@@ -115,13 +112,10 @@ class WebhookController {
         });
 
         if (customer && !customer.snovSentAt) {
-          logger.info(`Adding prospect to Snov welcome list for ${customerData.email}`);
-          const result = await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName);
-
-          if (result && (result.success !== false)) {
-            await customerService.updateSnovSentAt(customerData.shopifyCustomerId);
-            logger.info('Welcome campaign triggered and snovSentAt updated');
-          }
+          logger.info(`Processing customer ${customerData.shopifyCustomerId}`);
+          await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName);
+          await customerService.updateSnovSentAt(customerData.shopifyCustomerId);
+          logger.info(`Checkout synced to Snov`);
         } else {
           logger.info(`Welcome campaign already sent for customer ${customerData.shopifyCustomerId}, skipping`);
         }

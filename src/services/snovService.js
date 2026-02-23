@@ -39,36 +39,24 @@ class SnovService {
     }
   }
 
-  async addToList(listId, email, firstName, lastName, customFields = {}) {
+  async addToList(listId, email, firstName, lastName) {
     if (config.snov.mock) {
-      logger.info(`[MOCK] Adding prospect to Snov list ${listId} for ${email}`);
-      return {
-        success: true,
-        mock: true,
-        data: { email, listId, firstName, lastName, customFields }
-      };
+      logger.info(`[MOCK] SNOV SEND → list=${listId} email=${email}`);
+      return { success: true, mock: true };
     }
 
+    const token = await this.getAccessToken();
+
+    const payload = {
+      listId: Number(listId),
+      email: email,
+      firstName: firstName || '',
+      lastName: lastName || ''
+    };
+
+    logger.info(`SNOV SEND → list=${listId} email=${email}`);
+
     try {
-      const token = await this.getAccessToken();
-
-      const payload = {
-        listId: Number(listId),
-        email: email,
-        firstName: firstName || '',
-        lastName: lastName || ''
-      };
-
-      if (firstName || lastName) {
-        payload.fullName = `${firstName || ''} ${lastName || ''}`.trim();
-      }
-
-      if (customFields && Object.keys(customFields).length > 0) {
-        payload.customFields = customFields;
-      }
-
-      logger.info(`Adding prospect to Snov list ${listId} for ${email}`);
-
       const response = await axios.post(
         'https://api.snov.io/v1/add-prospect-to-list',
         payload,
@@ -80,73 +68,40 @@ class SnovService {
         }
       );
 
-      logger.info('Prospect added successfully');
+      logger.info(`SNOV SUCCESS → ${email}`, response.data);
       return response.data;
     } catch (error) {
-      logger.error('Snov API error', error.response?.data || error.message);
-      // Do NOT crash main workflow, return error structure
-      return { success: false, error: error.response?.data || error.message };
+      logger.error('SNOV FAIL', error.response?.data || error.message);
+      throw error;
     }
   }
 
-  async triggerAbandoned(email, firstName, lastName, checkoutData = {}) {
-    const listId = config.snov.lists.abandoned;
-
+  async triggerAbandoned(email, firstName, lastName) {
+    const listId = process.env.SNOV_LIST_ABANDONED;
     if (!listId || listId === 'xxxxx') {
       logger.warn('SNOV_LIST_ABANDONED not configured, skipping');
-      return { skipped: true, reason: 'List ID not configured' };
+      return { skipped: true };
     }
-
-    return await this.addToList(
-      listId,
-      email,
-      firstName,
-      lastName,
-      {
-        recovery_url: checkoutData.recoveryUrl,
-        cart_value: String(checkoutData.cartValue),
-        currency: checkoutData.currency
-      }
-    );
+    return await this.addToList(listId, email, firstName, lastName);
   }
 
-  async triggerUpsell(email, firstName, lastName, orderData = {}) {
-    const listId = config.snov.lists.upsell;
-
+  async triggerUpsell(email, firstName, lastName) {
+    const listId = process.env.SNOV_LIST_UPSELL;
     if (!listId || listId === 'xxxxx') {
       logger.warn('SNOV_LIST_UPSELL not configured, skipping');
-      return { skipped: true, reason: 'List ID not configured' };
+      return { skipped: true };
     }
-
-    return await this.addToList(
-      listId,
-      email,
-      firstName,
-      lastName,
-      {
-        order_value: String(orderData.totalPrice),
-        currency: orderData.currency
-      }
-    );
+    return await this.addToList(listId, email, firstName, lastName);
   }
 
   async triggerWelcome(email, firstName, lastName) {
-    const listId = config.snov.lists.welcome;
-
+    const listId = process.env.SNOV_LIST_WELCOME;
     if (!listId || listId === 'xxxxx') {
       logger.warn('SNOV_LIST_WELCOME not configured, skipping');
-      return { skipped: true, reason: 'List ID not configured' };
+      return { skipped: true };
     }
-
-    return await this.addToList(
-      listId,
-      email,
-      firstName,
-      lastName
-    );
+    return await this.addToList(listId, email, firstName, lastName);
   }
 }
-
-const prisma = require('../config/prisma');
 
 module.exports = new SnovService();
