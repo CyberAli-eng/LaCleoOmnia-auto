@@ -19,25 +19,23 @@ class DNEService {
             return { success: true, skipped: true, reason: 'invalid_email' };
         }
 
+        if (!dneListId || dneListId === 'undefined') {
+            logger.error(`SNOV DNE FAIL → Missing listId for email ${email}. Check environment variables.`);
+            return { success: false, error: 'missing_config', message: 'listId is undefined' };
+        }
+
         try {
             // Add a 1.5 second delay BEFORE getting token and making request to stay under 60rpm
             await new Promise(resolve => setTimeout(resolve, 1500));
 
             const token = await snovService.getAccessToken();
 
-            // Based on provided Snov.io API documentation:
-            // Endpoint: https://api.snov.io/v1/do-not-email-list
-            // Method: POST
-            // Params: listId (required), items (array of emails/domains)
-            // Note: The example shows items sent as part of the query string for some reason, 
-            // but standard POST usually accepts JSON body. Let's try body first.
-
             const payload = {
                 listId: Number(dneListId),
-                items: [email]
+                items: Array.isArray(email) ? email : [email]
             };
 
-            logger.info(`SNOV DNE SEND → list=${dneListId} email=${email}`);
+            logger.info(`SNOV DNE SEND → list=${dneListId} count=${payload.items.length}`);
 
             const response = await axios.post(
                 `${this.baseUrl}/do-not-email-list`,
@@ -50,13 +48,11 @@ class DNEService {
                 }
             );
 
-            // Snov API response for this endpoint: [{"success":true,"data":{"duplicates":[]}}]
-            // or similar structure.
             const responseData = Array.isArray(response.data) ? response.data[0] : response.data;
 
             if (responseData.success) {
                 logger.info(`SNOV DNE SUCCESS`);
-                return { success: true };
+                return { success: true, data: responseData.data };
             } else {
                 logger.warn(`SNOV DNE FAILED: ${JSON.stringify(responseData)}`);
                 return { success: false, error: 'api_failed', data: responseData };

@@ -9,13 +9,17 @@ class CustomerService {
         update: {
           email: customerData.email,
           firstName: customerData.firstName,
-          lastName: customerData.lastName
+          lastName: customerData.lastName,
+          address: customerData.address,
+          phone: customerData.phone
         },
         create: {
           shopifyCustomerId: customerData.shopifyCustomerId,
           email: customerData.email,
           firstName: customerData.firstName,
-          lastName: customerData.lastName
+          lastName: customerData.lastName,
+          address: customerData.address,
+          phone: customerData.phone
         }
       });
 

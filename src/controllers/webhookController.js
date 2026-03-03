@@ -6,6 +6,19 @@ const prisma = require('../config/prisma');
 const { logger } = require('../utils/logger');
 
 class WebhookController {
+  extractAddress(addressObj) {
+    if (!addressObj) return '';
+    const parts = [
+      addressObj.address1,
+      addressObj.address2,
+      addressObj.city,
+      addressObj.province,
+      addressObj.zip,
+      addressObj.country
+    ].filter(part => part && part.trim() !== '');
+    return parts.join(', ');
+  }
+
   async handleCheckout(req, res) {
     try {
       const webhook = req.body;
@@ -22,7 +35,9 @@ class WebhookController {
         lastName: webhook.customer?.last_name || webhook.billing_address?.last_name || '',
         recoveryUrl: webhook.abandoned_checkout_url || '',
         cartValue: parseFloat(webhook.total_price) || 0,
-        currency: webhook.currency || 'USD'
+        currency: webhook.currency || 'USD',
+        address: this.extractAddress(webhook.shipping_address || webhook.billing_address),
+        phone: webhook.shipping_address?.phone || webhook.billing_address?.phone || webhook.customer?.phone || ''
       };
 
       await checkoutService.upsertCheckout(checkoutData);
@@ -49,7 +64,9 @@ class WebhookController {
         orderId: String(webhook.id),
         email: webhook.email,
         totalPrice: parseFloat(webhook.total_price) || 0,
-        currency: webhook.currency || 'USD'
+        currency: webhook.currency || 'USD',
+        address: this.extractAddress(webhook.shipping_address || webhook.billing_address),
+        phone: webhook.shipping_address?.phone || webhook.billing_address?.phone || webhook.customer?.phone || ''
       };
 
       await orderService.createOrder(orderData);
@@ -68,7 +85,7 @@ class WebhookController {
           });
 
           logger.info(`Processing order ${orderData.orderId}`);
-          await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '');
+          await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '', order.address, order.phone);
           await orderService.updateSnovSentAt(orderData.orderId);
           logger.info(`Checkout synced to Snov`);
         } else {
@@ -100,7 +117,9 @@ class WebhookController {
         shopifyCustomerId: String(webhook.id),
         email: webhook.email,
         firstName: webhook.first_name || '',
-        lastName: webhook.last_name || ''
+        lastName: webhook.last_name || '',
+        address: this.extractAddress(webhook.default_address),
+        phone: webhook.default_address?.phone || webhook.phone || ''
       };
 
       await customerService.upsertCustomer(customerData);
@@ -113,7 +132,7 @@ class WebhookController {
 
         if (customer && !customer.snovSentAt) {
           logger.info(`Processing customer ${customerData.shopifyCustomerId}`);
-          await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName);
+          await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName, customer.address, customer.phone);
           await customerService.updateSnovSentAt(customerData.shopifyCustomerId);
           logger.info(`Checkout synced to Snov`);
         } else {

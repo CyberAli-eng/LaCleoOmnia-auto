@@ -9,13 +9,17 @@ class OrderService {
         update: {
           email: orderData.email,
           totalPrice: orderData.totalPrice,
-          currency: orderData.currency
+          currency: orderData.currency,
+          address: orderData.address,
+          phone: orderData.phone
         },
         create: {
           orderId: orderData.orderId,
           email: orderData.email,
           totalPrice: orderData.totalPrice,
-          currency: orderData.currency
+          currency: orderData.currency,
+          address: orderData.address,
+          phone: orderData.phone
         }
       });
 

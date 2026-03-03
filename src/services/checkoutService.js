@@ -13,6 +13,8 @@ class CheckoutService {
           recoveryUrl: checkoutData.recoveryUrl,
           cartValue: checkoutData.cartValue,
           currency: checkoutData.currency,
+          address: checkoutData.address,
+          phone: checkoutData.phone,
           status: 'pending',
           updatedAt: new Date()
         },
@@ -24,6 +26,8 @@ class CheckoutService {
           recoveryUrl: checkoutData.recoveryUrl,
           cartValue: checkoutData.cartValue,
           currency: checkoutData.currency,
+          address: checkoutData.address,
+          phone: checkoutData.phone,
           status: 'pending'
         }
       });

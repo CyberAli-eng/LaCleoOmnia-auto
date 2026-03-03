@@ -44,25 +44,32 @@ class SnovService {
     }
   }
 
-  async addToList(listId, email, firstName, lastName) {
+  async addToList(listId, email, firstName, lastName, address, phone) {
     if (config.snov.mock) {
       logger.info(`[MOCK] SNOV SEND → list=${listId} email=${email}`);
       return { success: true, mock: true };
     }
-
-    const token = await this.getAccessToken();
 
     if (!email || email === 'null' || !email.includes('@')) {
       logger.warn(`SNOV SKIP → Invalid email: ${email}`);
       return { success: true, skipped: true, reason: 'invalid_email' };
     }
 
+    // Add a 1.5 second delay to stay under 60rpm
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    const token = await this.getAccessToken();
+
     const payload = {
       listId: Number(listId),
       email: email,
       firstName: firstName || '',
-      lastName: lastName || ''
+      lastName: lastName || '',
+      customFields: {}
     };
+
+    if (address) payload.customFields.address = address;
+    if (phone) payload.customFields.phone = phone;
 
     logger.info(`SNOV SEND → list=${listId} email=${email}`);
 
@@ -126,31 +133,31 @@ class SnovService {
     }
   }
 
-  async triggerAbandoned(email, firstName, lastName) {
+  async triggerAbandoned(email, firstName, lastName, address, phone) {
     const listId = config.snov.lists.abandoned;
     if (!listId || listId === 'xxxxx') {
       logger.warn('SNOV_LIST_ABANDONED not configured, skipping');
       return { skipped: true };
     }
-    return await this.addToList(listId, email, firstName, lastName);
+    return await this.addToList(listId, email, firstName, lastName, address, phone);
   }
 
-  async triggerUpsell(email, firstName, lastName) {
+  async triggerUpsell(email, firstName, lastName, address, phone) {
     const listId = config.snov.lists.upsell;
     if (!listId || listId === 'xxxxx') {
       logger.warn('SNOV_LIST_UPSELL not configured, skipping');
       return { skipped: true };
     }
-    return await this.addToList(listId, email, firstName, lastName);
+    return await this.addToList(listId, email, firstName, lastName, address, phone);
   }
 
-  async triggerWelcome(email, firstName, lastName) {
+  async triggerWelcome(email, firstName, lastName, address, phone) {
     const listId = config.snov.lists.welcome;
     if (!listId || listId === 'xxxxx') {
       logger.warn('SNOV_LIST_WELCOME not configured, skipping');
       return { skipped: true };
     }
-    return await this.addToList(listId, email, firstName, lastName);
+    return await this.addToList(listId, email, firstName, lastName, address, phone);
   }
 }
 

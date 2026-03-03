@@ -26,6 +26,8 @@ model Checkout {
   orderId     String?
   snovSentAt  DateTime?
   dneSyncedAt DateTime?
+  address     String?
+  phone       String?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
@@ -41,6 +43,8 @@ model Order {
   currency   String?
   snovSentAt  DateTime?
   dneSyncedAt DateTime?
+  address     String?
+  phone       String?
   createdAt  DateTime @default(now())
 
   @@index([email])
@@ -54,6 +58,8 @@ model Customer {
   lastName           String?
   snovSentAt         DateTime?
   dneSyncedAt        DateTime?
+  address            String?
+  phone              String?
   createdAt          DateTime @default(now())
 
   @@index([email])

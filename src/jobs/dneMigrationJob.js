@@ -24,58 +24,48 @@ function startDNEMigrationJob() {
             // 1. Process Customers (Welcome DNE)
             const unsyncedCustomers = await prisma.customer.findMany({
                 where: {
-                    email: { not: null },
+                    email: { not: null, not: '' },
                     dneSyncedAt: null
                 },
                 take: BATCH_SIZE
             });
 
-            const totalUnsyncedCustomers = await prisma.customer.count({
-                where: {
-                    email: { not: null },
-                    dneSyncedAt: null
-                }
-            });
-
             if (unsyncedCustomers.length > 0) {
-                logger.info(`DNE MIGRATION → Processed ${unsyncedCustomers.length} / Total ${totalUnsyncedCustomers}`);
-                for (const customer of unsyncedCustomers) {
-                    const result = await dneService.addToDNEList(config.snov.lists.dneWelcome, customer.email);
-                    if (result.success) {
-                        await prisma.customer.update({
-                            where: { id: customer.id },
-                            data: { dneSyncedAt: new Date() }
-                        });
-                    }
+                const emails = unsyncedCustomers.map(c => c.email);
+                logger.info(`DNE MIGRATION → Syncing ${emails.length} Customers to Welcome DNE`);
+
+                const result = await dneService.addToDNEList(config.snov.lists.dneWelcome, emails);
+                if (result.success) {
+                    const ids = unsyncedCustomers.map(c => c.id);
+                    await prisma.customer.updateMany({
+                        where: { id: { in: ids } },
+                        data: { dneSyncedAt: new Date() }
+                    });
+                    logger.info(`DNE MIGRATION → Marked ${ids.length} customers as synced`);
                 }
             }
 
             // 2. Process Orders (Upsell DNE)
             const unsyncedOrders = await prisma.order.findMany({
                 where: {
-                    email: { not: null },
+                    email: { not: null, not: '' },
                     dneSyncedAt: null
                 },
                 take: BATCH_SIZE
             });
 
-            const totalUnsyncedOrders = await prisma.order.count({
-                where: {
-                    email: { not: null },
-                    dneSyncedAt: null
-                }
-            });
-
             if (unsyncedOrders.length > 0) {
-                logger.info(`DNE MIGRATION → Processed ${unsyncedOrders.length} / Total ${totalUnsyncedOrders}`);
-                for (const order of unsyncedOrders) {
-                    const result = await dneService.addToDNEList(config.snov.lists.dneUpsell, order.email);
-                    if (result.success) {
-                        await prisma.order.update({
-                            where: { id: order.id },
-                            data: { dneSyncedAt: new Date() }
-                        });
-                    }
+                const emails = unsyncedOrders.map(o => o.email);
+                logger.info(`DNE MIGRATION → Syncing ${emails.length} Orders to Upsell DNE`);
+
+                const result = await dneService.addToDNEList(config.snov.lists.dneUpsell, emails);
+                if (result.success) {
+                    const ids = unsyncedOrders.map(o => o.id);
+                    await prisma.order.updateMany({
+                        where: { id: { in: ids } },
+                        data: { dneSyncedAt: new Date() }
+                    });
+                    logger.info(`DNE MIGRATION → Marked ${ids.length} orders as synced`);
                 }
             }
 
