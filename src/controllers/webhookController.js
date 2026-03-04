@@ -5,23 +5,29 @@ const customerService = require('../services/customerService');
 const prisma = require('../config/prisma');
 const { logger } = require('../utils/logger');
 
-class WebhookController {
-  extractAddress(addressObj) {
-    if (!addressObj) return '';
-    const parts = [
-      addressObj.address1,
-      addressObj.address2,
-      addressObj.city,
-      addressObj.province,
-      addressObj.zip,
-      addressObj.country
-    ].filter(part => part && part.trim() !== '');
-    return parts.join(', ');
-  }
+// Helper function outside the class to avoid context issues
+const extractAddress = (addressObj) => {
+  if (!addressObj) return '';
+  const parts = [
+    addressObj.address1,
+    addressObj.address2,
+    addressObj.city,
+    addressObj.province,
+    addressObj.zip,
+    addressObj.country
+  ].filter(part => part && part.trim() !== '');
+  return parts.join(', ');
+};
 
-  async handleCheckout(req, res) {
+class WebhookController {
+  handleCheckout = async (req, res) => {
     try {
       const webhook = req.body;
+
+      if (!webhook.email) {
+        logger.info('Checkout webhook received with no email, skipping Snov sync:', { id: webhook.id });
+        return res.status(200).json({ success: true, message: 'No email provided' });
+      }
 
       logger.info('Checkout webhook received:', {
         id: webhook.id,
@@ -36,7 +42,7 @@ class WebhookController {
         recoveryUrl: webhook.abandoned_checkout_url || '',
         cartValue: parseFloat(webhook.total_price) || 0,
         currency: webhook.currency || 'USD',
-        address: this.extractAddress(webhook.shipping_address || webhook.billing_address),
+        address: extractAddress(webhook.shipping_address || webhook.billing_address),
         phone: webhook.shipping_address?.phone || webhook.billing_address?.phone || webhook.customer?.phone || ''
       };
 
@@ -49,11 +55,16 @@ class WebhookController {
       logger.error('Checkout webhook error:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
-  }
+  };
 
-  async handleOrder(req, res) {
+  handleOrder = async (req, res) => {
     try {
       const webhook = req.body;
+
+      if (!webhook.email) {
+        logger.info('Order webhook received with no email, skipping Snov sync:', { id: webhook.id });
+        return res.status(200).json({ success: true, message: 'No email provided' });
+      }
 
       logger.info('Order webhook received:', {
         id: webhook.id,
@@ -65,7 +76,7 @@ class WebhookController {
         email: webhook.email,
         totalPrice: parseFloat(webhook.total_price) || 0,
         currency: webhook.currency || 'USD',
-        address: this.extractAddress(webhook.shipping_address || webhook.billing_address),
+        address: extractAddress(webhook.shipping_address || webhook.billing_address),
         phone: webhook.shipping_address?.phone || webhook.billing_address?.phone || webhook.customer?.phone || ''
       };
 
@@ -87,7 +98,7 @@ class WebhookController {
           logger.info(`Processing order ${orderData.orderId}`);
           await snovService.triggerUpsell(orderData.email, checkout?.firstName || '', checkout?.lastName || '', order.address, order.phone);
           await orderService.updateSnovSentAt(orderData.orderId);
-          logger.info(`Checkout synced to Snov`);
+          logger.info(`Order synced to Snov`);
         } else {
           logger.info(`Upsell campaign already sent for order ${orderData.orderId}, skipping`);
         }
@@ -102,11 +113,16 @@ class WebhookController {
       logger.error('Order webhook error:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
-  }
+  };
 
-  async handleCustomer(req, res) {
+  handleCustomer = async (req, res) => {
     try {
       const webhook = req.body;
+
+      if (!webhook.email) {
+        logger.info('Customer webhook received with no email, skipping Snov sync:', { id: webhook.id });
+        return res.status(200).json({ success: true, message: 'No email provided' });
+      }
 
       logger.info('Customer webhook received:', {
         id: webhook.id,
@@ -118,7 +134,7 @@ class WebhookController {
         email: webhook.email,
         firstName: webhook.first_name || '',
         lastName: webhook.last_name || '',
-        address: this.extractAddress(webhook.default_address),
+        address: extractAddress(webhook.default_address),
         phone: webhook.default_address?.phone || webhook.phone || ''
       };
 
@@ -134,7 +150,7 @@ class WebhookController {
           logger.info(`Processing customer ${customerData.shopifyCustomerId}`);
           await snovService.triggerWelcome(customerData.email, customerData.firstName, customerData.lastName, customer.address, customer.phone);
           await customerService.updateSnovSentAt(customerData.shopifyCustomerId);
-          logger.info(`Checkout synced to Snov`);
+          logger.info(`Customer synced to Snov`);
         } else {
           logger.info(`Welcome campaign already sent for customer ${customerData.shopifyCustomerId}, skipping`);
         }
@@ -149,7 +165,7 @@ class WebhookController {
       logger.error('Customer webhook error:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
-  }
+  };
 }
 
 module.exports = new WebhookController();
